@@ -1,0 +1,30 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Choose MP4 files to upload to the Video Catalogue";
+}
+<h3><i>@ViewData["Title"]</i></h3>
+
+<form enctype="multipart/form-data"
+      asp-controller="FileUpload"
+      asp-action="UploadFile"
+      method="post">
+    <dl>
+        <dt>
+            <label for="FileUpload_FormFile">File</label>
+        </dt>
+        <dd>
+            <input type="file"
+                   name="postedFiles"
+                   id="mp4FileSelector"
+                   title="Open"
+                   accept=".txt"
+                   multiple />
+        </dd>
+    </dl>
+
+    <input class="btn" type="submit" value="Upload" />
+
+    <div style="margin-top:15px">
+        <output name="result"></output>
+    </div>
+</form>
