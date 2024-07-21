@@ -8,21 +8,18 @@
       asp-controller="FileUpload"
       asp-action="UploadFile"
       method="post">
-    <dl>
-        <dt>
-            <label for="FileUpload_FormFile">File</label>
-        </dt>
+    <dl>        
         <dd>
             <input type="file"
                    name="postedFiles"
                    id="mp4FileSelector"
                    title="Open"
-                   accept=".txt"
+                   accept=".mp4"
                    multiple />
         </dd>
     </dl>
 
-    <input class="btn" type="submit" value="Upload" />
+    <input class="btn btn-outline-secondary" type="submit" value="Upload" />
 
     <div style="margin-top:15px">
         <output name="result"></output>

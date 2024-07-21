@@ -15,28 +15,6 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public IActionResult Index(IFormFile postedFile)
-    {
-        if (postedFile == null || postedFile.Length == 0)
-            return BadRequest("No file selected for upload...");
-
-        string fileName = Path.GetFileName(postedFile.FileName);
-        string contentType = postedFile.ContentType;
-
-        return View();
-    }
-
-    //public Task<IActionResult> Post(List<IFormFile> battlePlans)
-    //{
-    //    return "";
-    //}
-
     public IActionResult Upload()
     {
         return View();

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<mp4viewernew.Models.FileViewModel>
+@{
+    string mp4Source = (string)TempData["fileToPlay"]!;
+}
+
+<div class="text-left" style="@((bool)TempData["emptyCatalogue"]! ? "display:block" : "display:none")" ">
+    <h4><i>The catalogue is empty. use the upload form to add videos.</i></h4>
+</div>
+
+<div class="text-left" style="@((bool)TempData["emptyCatalogue"]! ? "display:none" : "display:block")" ">
+    <h4><i>Select a video from the table to start playback.</i></h4>
+</div>
+
+<div>
+    <video id="mp4Player"
+           src="@Url.Content(mp4Source)"
+           width=100%
+           height=100%
+           controls
+           object-fit: fill;
+           autoplay
+           style="@((bool)TempData["emptyCatalogue"]! ? "display:none" : "display:block")" ">
+        Cannot play this video.
+    </video>
+</div>
+
+<table class="table table-responsive table-bordered flex-grow-1">
+    @foreach (var file in Model)
+    {
+        <tr>
+            <td>
+                <a href="/Catalogue/ViewFile?fileName=@file.FileName">
+                    @file.FileName
+                </a>
+            </td>
+        </tr>
+    }
+</table>
