@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using mp4viewernew.Utilities;
@@ -11,14 +12,17 @@ public class FileUploadController : Controller
 {
     private readonly ILogger<FileUploadController> _logger;
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _env;
 
     public FileUploadController(
         ILogger<FileUploadController> logger,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IWebHostEnvironment env
     )
     {
         _logger = logger;
         _configuration = configuration;
+        _env = env;
     }
 
     /// <summary>
@@ -27,33 +31,51 @@ public class FileUploadController : Controller
     /// <returns></returns>
     [HttpPost]
     [Route(nameof(UploadFile))]
-    //[DisableFormValueModelBindingAttribute]
+    [DisableFormValueModelBindingAttribute]
+    [DisableCors]
+    [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
     public async Task<IActionResult> UploadFile(IEnumerable<IFormFile> postedFiles)
     {
         //return BadRequest("No file selected.");
 
         foreach (var postedFile in postedFiles)
         {
-            //if (FileHelpers.FileLengthInAcceptableRange(postedFile, 200))
-            //    return BadRequest("No file selected.");
+            if (FileHelpers.FileLengthInAcceptableRange(postedFile, 200))
+                return BadRequest("File size exceeded.");
             var saveFileName = Path.GetFileName(postedFile.FileName);
             var contentType = postedFile.ContentType;
+
+            //var contentPath = _env.WebRootPath;
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await postedFile.CopyToAsync(memoryStream);
-                var tempPath = Path.GetTempPath() + _configuration["ServerFolder:FolderName"];
-                                
-                if (!Path.Exists(tempPath))
+                var contentPath = @$"{_env.WebRootPath}\{_configuration["ServerFolder:FolderName"]}";
+
+                if (!Path.Exists(contentPath))
                 {
-                    Directory.CreateDirectory(tempPath + @"\" + _configuration["ServerFolder:FolderName"]);
+                    Directory.CreateDirectory(contentPath);
                 }
-                saveFileName = @$"{tempPath}\{saveFileName}";                
+                saveFileName = @$"{contentPath}\{saveFileName}";
                 FileStream file = new FileStream(saveFileName, FileMode.Create, System.IO.FileAccess.Write);
                 memoryStream.WriteTo(file);
             }
+
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    await postedFile.CopyToAsync(memoryStream);
+            //    var tempPath = $"{Path.GetTempPath()}{_configuration["ServerFolder:FolderName"]}";
+
+            //    if (!Path.Exists(tempPath))
+            //    {
+            //        Directory.CreateDirectory(tempPath);
+            //    }
+            //    saveFileName = @$"{tempPath}\{saveFileName}";                
+            //    FileStream file = new FileStream(saveFileName, FileMode.Create, System.IO.FileAccess.Write);
+            //    memoryStream.WriteTo(file);
+            //}
         }
-        return Ok();
+        return Redirect("~/Catalogue/Index");
 
 
 
