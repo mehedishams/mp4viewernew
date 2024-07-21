@@ -3,11 +3,11 @@
     string mp4Source = (string)TempData["fileToPlay"]!;
 }
 
-<div class="text-left" style="@((bool)TempData["hidden"]! ? "display:none" : "display:block")" ">
-    <h4><i>the catalogue is empty. use the upload form to add videos.</i></h4>
+<div class="text-left" style="@((bool)TempData["emptyCatalogue"]! ? "display:block" : "display:none")" ">
+    <h4><i>The catalogue is empty. use the upload form to add videos.</i></h4>
 </div>
 
-<div class="text-left" style="@((bool)TempData["hidden"]! ? "display:block" : "display:none")" ">
+<div class="text-left" style="@((bool)TempData["emptyCatalogue"]! ? "display:none" : "display:block")" ">
     <h4><i>Select a video from the table to start playback.</i></h4>
 </div>
 
@@ -18,8 +18,9 @@
            height=100%
            controls
            object-fit: fill;
-           autoplay>
-        This is fallback content to display for user agents that do not support the video tag.
+           autoplay
+           style="@((bool)TempData["emptyCatalogue"]! ? "display:none" : "display:block")" ">
+        Cannot play this video.
     </video>
 </div>
 
