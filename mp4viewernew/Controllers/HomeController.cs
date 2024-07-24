@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mp4viewernew.Models;
 using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 
 namespace mp4viewernew.Controllers;
 
