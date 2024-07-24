@@ -1,9 +1,8 @@
-namespace mp4viewernew.Models
-{
-    public class ErrorViewModel
-    {
-        public string? RequestId { get; set; }
+namespace mp4viewernew.Models;
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-    }
+public class ErrorViewModel
+{
+    public string? RequestId { get; set; }
+
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }

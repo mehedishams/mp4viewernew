@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Mvc;
 using mp4viewernew.Utilities;
-using System.IO;
-using static mp4viewernew.Filters.ModelBinding;
 
 namespace mp4viewernew.Controllers;
 
@@ -32,8 +27,6 @@ public class FileUploadController : Controller
     /// <returns></returns>
     [HttpPost]
     [Route(nameof(UploadFile))]
-    [DisableFormValueModelBindingAttribute]
-    [DisableCors]
     [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
     public async Task<IActionResult> UploadFile(IEnumerable<IFormFile> postedFiles)
     {
@@ -47,7 +40,7 @@ public class FileUploadController : Controller
             if (FileHelpers.FileLengthInAcceptableRange(postedFile, 200))
                 return BadRequest("File size exceeded.");
 
-            //if (!(await FileHelpers.ValidMp4File(postedFile, permittedExtensions)))
+            //if (!(await FileHelpers.ValidMp4File(postedFile, permittedExtensions, _logger)))
             //    return BadRequest("Not a valid mp4 file.");
 
             var saveFileName = Path.GetFileName(postedFile.FileName);
